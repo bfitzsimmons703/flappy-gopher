@@ -175,13 +175,20 @@ func main() {
 
 			gopher.update(gopher.xPos, newGopherY, newGopherTexture)
 
-			if rl.IsKeyDown(rl.KeyQ) {
-				renderScreen = GameOver
-			}
 		}
 
 		//Update asteroids for next frame. Separate from the gopher block because that can end the game if the gopher hits the floor
 		if renderScreen == GamePlay {
+			if score > 1 && (math.Mod(score, 100.0) == 0) && len(asteroids) <= 10 {
+				asteroids = append(asteroids, GameEntity{
+					xPos:    SCREEN_WIDTH,
+					yPos:    getRandomYPos(),
+					width:   asteroidTexture.Width,
+					height:  asteroidTexture.Height,
+					texture: asteroidTexture,
+				})
+			}
+
 			for idx, asteroid := range asteroids {
 				newAsteroidY := asteroid.yPos
 				newAsteroidX := asteroid.xPos - GRAVITY
