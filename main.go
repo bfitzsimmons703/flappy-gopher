@@ -103,6 +103,7 @@ func main() {
 
 	rl.InitAudioDevice()
 	explodeSound := rl.LoadSound("assets/sounds/explode.wav")
+	gameplayMusic := rl.LoadMusicStream("assets/sounds/gameplay.mp3")
 
 	highestScore := 0
 	renderScreen := MainMenu
@@ -139,6 +140,16 @@ func main() {
 			txt := fmt.Sprintf("Highest Score: %d", highestScore)
 			txtMeasurements := rl.MeasureText(txt, 20)
 			rl.DrawText(txt, SCREEN_WIDTH-txtMeasurements-10, 10, 20, rl.LightGray)
+		}
+
+		if renderScreen == GamePlay {
+			if !rl.IsMusicStreamPlaying(gameplayMusic) {
+				rl.PlayMusicStream(gameplayMusic)
+			} else {
+				rl.UpdateMusicStream(gameplayMusic)
+			}
+		} else {
+			rl.StopMusicStream(gameplayMusic)
 		}
 
 		//Update gopher for next frame
@@ -242,6 +253,7 @@ func main() {
 
 	rl.StopSoundMulti()
 	rl.UnloadSound(explodeSound)
+	rl.UnloadMusicStream(gameplayMusic)
 	rl.UnloadTexture(gopherUpTexture)
 	rl.UnloadTexture(gopherDownTexture)
 	rl.UnloadTexture(asteroidTexture)
