@@ -152,7 +152,7 @@ func main() {
 			rl.StopMusicStream(gameplayMusic)
 		}
 
-		//Update gopher for next frame
+		//Update gopher and asteroids for next frame
 		if renderScreen == GamePlay {
 			score += 0.25
 
@@ -160,25 +160,24 @@ func main() {
 			var newGopherTexture rl.Texture2D
 
 			if rl.IsKeyDown(rl.KeySpace) {
-				newGopherY = int32(math.Max(0, float64(gopher.yPos-GRAVITY)))
+				newGopherY = gopher.yPos - GRAVITY
 				newGopherTexture = gopherUpTexture
 			} else {
-				newGopherY = int32(gopher.yPos + GRAVITY)
+				// newGopherY = int32(math.Min(float64(SCREEN_HEIGHT-gopher.height), float64()))
+				newGopherY = gopher.yPos + GRAVITY
 				newGopherTexture = gopherDownTexture
 			}
 
-			if newGopherY > (SCREEN_HEIGHT - gopher.height) {
-				renderScreen = GameEnding
-				newGopherTexture = explosionTexture
-				rl.PlaySoundMulti(explodeSound)
+			if newGopherY < -gopher.height {
+				//gopher has gone past top of window, flip to the bottom
+				newGopherY = SCREEN_HEIGHT + gopher.height
+			} else if newGopherY > SCREEN_HEIGHT+gopher.height {
+				//opposite, gopher is below the bottom, flip to the top
+				newGopherY = -gopher.height
 			}
 
 			gopher.update(gopher.xPos, newGopherY, newGopherTexture)
 
-		}
-
-		//Update asteroids for next frame. Separate from the gopher block because that can end the game if the gopher hits the floor
-		if renderScreen == GamePlay {
 			if score > 1 && (math.Mod(score, 100.0) == 0) && len(asteroids) <= 10 {
 				asteroids = append(asteroids, GameEntity{
 					xPos:    SCREEN_WIDTH,
