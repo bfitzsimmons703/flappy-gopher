@@ -178,7 +178,7 @@ func main() {
 
 			gopher.update(gopher.xPos, newGopherY, newGopherTexture)
 
-			if score > 1 && (math.Mod(score, 100.0) == 0) && len(asteroids) <= 10 {
+			if score > 1 && (math.Mod(score, 100.0) == 0) && len(asteroids) <= 15 {
 				asteroids = append(asteroids, GameEntity{
 					xPos:    SCREEN_WIDTH,
 					yPos:    getRandomYPos(),
