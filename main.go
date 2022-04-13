@@ -134,26 +134,20 @@ func main() {
 			if rl.IsKeyPressed(rl.KeyEnter) {
 				renderScreen = GamePlay
 			}
-		}
-
-		if renderScreen != MainMenu && highestScore > 0 {
+		} else if highestScore > 0 {
 			txt := fmt.Sprintf("Highest Score: %d", highestScore)
 			txtMeasurements := rl.MeasureText(txt, 20)
 			rl.DrawText(txt, SCREEN_WIDTH-txtMeasurements-10, 10, 20, rl.LightGray)
 		}
 
+		//Update gopher and asteroids for next frame
 		if renderScreen == GamePlay {
 			if !rl.IsMusicStreamPlaying(gameplayMusic) {
 				rl.PlayMusicStream(gameplayMusic)
 			} else {
 				rl.UpdateMusicStream(gameplayMusic)
 			}
-		} else {
-			rl.StopMusicStream(gameplayMusic)
-		}
 
-		//Update gopher and asteroids for next frame
-		if renderScreen == GamePlay {
 			score += 0.25
 
 			var newGopherY int32
@@ -210,6 +204,8 @@ func main() {
 					break
 				}
 			}
+		} else {
+			rl.StopMusicStream(gameplayMusic)
 		}
 
 		//Draw the main game play textures
